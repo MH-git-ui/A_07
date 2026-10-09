@@ -6,10 +6,25 @@ const client = new MongoClient(process.env.BETTER_AUTH_URL as string);
 const db = client.db("better-auth");
 
 export const auth = betterAuth({
-     emailAndPassword: { 
-    enabled: true, 
-  }, 
-  database: mongodbAdapter(db, {
-    client,
-  }),
+  database: mongodbAdapter(db, { client }),
+
+  // Email + password login (no email verification / reset, per assignment)
+  emailAndPassword: {
+    enabled: true,
+    // Note: autoSignIn:false would make BetterAuth hide "email already exists"
+    // errors (it returns a fake success). We keep autoSignIn on and sign the
+    // user out on the client right after sign-up instead (see SignUpForm).
+  },
+
+  // Google + GitHub social login
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    },
+  },
 });
