@@ -2,10 +2,17 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-const client = new MongoClient(process.env.BETTER_AUTH_URL as string);
+const mongoUri = process.env.MONGODB_URI;
+
+if (!mongoUri) {
+  throw new Error("MONGODB_URI must be set to a MongoDB connection string.");
+}
+
+const client = new MongoClient(mongoUri);
 const db = client.db("better-auth");
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
   database: mongodbAdapter(db, { client }),
 
   // Email + password login (no email verification / reset, per assignment)
