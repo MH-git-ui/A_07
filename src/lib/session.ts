@@ -1,9 +1,11 @@
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
-import { auth } from "./auth";
+import { getAuth } from "./auth";
 
 export async function getSession() {
-  return auth.api.getSession({ headers: await headers() });
+  await connection();
+  return getAuth().api.getSession({ headers: await headers() });
 }
 
 /** Server-side guard: returns the session or redirects to /signin (then back to `path`). */
