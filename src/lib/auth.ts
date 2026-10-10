@@ -8,7 +8,7 @@ const db = client.db("Better_auth");
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
-  plugins: [dash()],
+  plugins: [dash({ apiKey: process.env.BETTER_AUTH_API_KEY })],
 
   // Email + password login (no email verification / reset, per assignment)
   emailAndPassword: {
