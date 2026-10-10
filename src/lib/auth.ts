@@ -1,14 +1,12 @@
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
-import { dash } from "@better-auth/infra";
 
 const client = new MongoClient(process.env.BETTER_AUTH_MONGODB_URL as string);
 const db = client.db("Better_auth");
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
-  plugins: [dash({ apiKey: process.env.BETTER_AUTH_API_KEY })],
 
   // Email + password login (no email verification / reset, per assignment)
   emailAndPassword: {
